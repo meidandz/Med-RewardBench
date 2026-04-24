@@ -4,6 +4,13 @@ Med-RewardBench is a vision-language benchmark pipeline for evaluating medical p
 
 This repository is prepared for GitHub release without bundling the benchmark data. Dataset files should be downloaded separately from Hugging Face and placed under the expected local directory structure.
 
+## Overview
+
+- Evaluate pairwise medical VLM responses across multiple modalities.
+- Load benchmark data from local `jsonl` and `parquet` files.
+- Export summary tables to Excel, CSV, and JSONL.
+- Support both public Hugging Face models and local fine-tuned checkpoints.
+
 ## Repository Structure
 
 ```text
@@ -27,6 +34,12 @@ Med-RewardBench/
 ```bash
 pip install -r requirements.txt
 ```
+
+## Supported Inputs and Outputs
+
+- Input data: modality-specific `jsonl` ground truth files and `parquet` benchmark files under `data/pair_gt_all/`
+- Main script: `vlm/00_benchmark_full_pipeline.py`
+- Output files: Excel summary plus optional CSV and JSONL tables
 
 ## Data Preparation
 
@@ -75,7 +88,8 @@ QWEN_ENABLE_THINKING=0 python vlm/00_benchmark_full_pipeline.py ...
 ## Notes
 
 - `vlm/model_builder_chosen_respon.py` contains the model builders and prompt formatting adapters.
-- Some model entries refer to local/private checkpoints. Replace those paths with your own local checkpoints if needed.
+- Some model entries use local checkpoints. Configure them with environment variables instead of editing private paths into the codebase.
+- Local checkpoint environment variables currently used by this repository include `MEDR1_MODEL_PATH`, `QWEN2_VL_7B_SFT_PATH`, `QWEN2_5_VL_7B_SFT_PATH`, and `QWEN2_VL_7B_DPO_PATH`.
 - Output artifacts should be written to `outputs/` or another ignored directory, not committed to Git.
 
 ## TODO Before Public Release

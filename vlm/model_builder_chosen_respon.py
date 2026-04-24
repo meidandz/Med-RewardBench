@@ -44,6 +44,17 @@ def _infer_tensor_parallel_size(preferred: int = 2) -> int:
     return preferred
 
 
+def _require_env_model_path(env_var: str, example_value: str) -> str:
+    model_path = os.getenv(env_var, "").strip()
+    if model_path:
+        return model_path
+    raise ValueError(
+        f"Model path for this checkpoint is not configured. "
+        f"Set environment variable {env_var} to the local checkpoint path "
+        f"(for example: {example_value})."
+    )
+
+
 # LLaVA-1.5-7B: llava-hf/llava-1.5-7b-hf
 def run_llava1_5_7_build():
     llm = LLM(model="llava-hf/llava-1.5-7b-hf",
@@ -419,7 +430,7 @@ def run_medvlmr1_build():
     return llm, tokenizer, stop_token_ids
 
 def run_medr1_build():
-    model_name = "/data/dingmeidan/LLM/Med-R1/VQA_MRI/"
+    model_name = _require_env_model_path("MEDR1_MODEL_PATH", "/path/to/Med-R1/VQA_MRI")
 
     # Tested on L40
     llm = LLM(
@@ -441,7 +452,7 @@ def run_medr1_build():
     return llm, tokenizer, stop_token_ids
 
 def run_qwen2vl7_sft_build():
-    model_name = "/data/dingmeidan/LLM/LLaMA-Factory0/models/qwen2_vl_lora_sft/"
+    model_name = _require_env_model_path("QWEN2_VL_7B_SFT_PATH", "/path/to/qwen2_vl_lora_sft")
 
     # Tested on L40
     llm = LLM(
@@ -464,7 +475,7 @@ def run_qwen2vl7_sft_build():
 
 
 def run_qwen2_5vl7_sft_build():
-    model_name = "/data/dingmeidan/LLM/LLaMA-Factory/outputs/qwen2_vl-7b/lora/sft_r128_1"
+    model_name = _require_env_model_path("QWEN2_5_VL_7B_SFT_PATH", "/path/to/qwen2.5-vl-7b-sft")
 
     # Tested on L40
     llm = LLM(
@@ -486,7 +497,7 @@ def run_qwen2_5vl7_sft_build():
     return llm, tokenizer, stop_token_ids
 
 def run_qwen2vl7_dpo_build():
-    model_name = "/data/dingmeidan/LLM/LLaMA-Factory0/models/qwen2_vl_lora_dpo1"
+    model_name = _require_env_model_path("QWEN2_VL_7B_DPO_PATH", "/path/to/qwen2_vl_lora_dpo")
 
     # Tested on L40
     llm = LLM(
